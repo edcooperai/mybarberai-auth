@@ -5,48 +5,29 @@
     <script>
         window.onload = function() {
             try {
-                // Debug: Log the incoming URL
-                console.log('Incoming URL:', window.location.href);
-                
-                // Get the hash parameters (everything after #)
                 const hashParams = new URLSearchParams(window.location.hash.substring(1));
                 
-                // Debug: Log the parsed parameters
-                console.log('Hash Params:', Object.fromEntries(hashParams));
+                // Get only the essential parameters
+                const params = {
+                    access_token: hashParams.get('access_token'),
+                    token_type: hashParams.get('token_type'),
+                    state: hashParams.get('state'),
+                    type: 'success'  // Add this to match Expo's expected format
+                };
                 
-                // Get required parameters
-                const access_token = hashParams.get('access_token');
-                const state = hashParams.get('state');
-                const token_type = hashParams.get('token_type');
+                // Build the final URL with all parameters
+                const queryString = new URLSearchParams(params).toString();
+                const finalUrl = `https://auth.expo.io/@edcooper/mybarberai?${queryString}`;
                 
-                // Construct minimal query string (only what Expo needs)
-                const queryParams = new URLSearchParams({
-                    access_token,
-                    token_type,
-                    state
-                });
-                
-                // Build the final URL
-                const finalUrl = `https://auth.expo.io/@edcooper/mybarberai?${queryParams.toString()}`;
-                
-                // Debug: Log the final URL
-                console.log('Redirecting to:', finalUrl);
-                
-                // Add visual feedback
-                document.body.innerHTML = 'Redirecting to app...';
-                
-                // Redirect
+                // Use replace for cleaner redirect
                 window.location.replace(finalUrl);
             } catch (error) {
-                console.error('Redirect Error:', error);
-                document.body.innerHTML = `Error: ${error.message}. <br><br>
-                    URL: ${window.location.href} <br><br>
-                    Please try again or contact support.`;
+                document.body.innerHTML = `Error: ${error.message}. Please try again.`;
             }
         }
     </script>
 </head>
 <body>
-    <p>Processing authentication...</p>
+    <p>Redirecting to app...</p>
 </body>
 </html>
