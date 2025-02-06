@@ -5,9 +5,6 @@
     <script>
         window.onload = function() {
             try {
-                // Log for debugging
-                console.log('Hash:', window.location.hash);
-                
                 // Get the hash parameters
                 const hashParams = new URLSearchParams(window.location.hash.substring(1));
                 
@@ -17,20 +14,11 @@
                     params[key] = value;
                 });
                 
-                // Log for debugging
-                console.log('Parsed params:', params);
-                
-                // Construct query string
+                // Convert to query string
                 const queryParams = new URLSearchParams(params);
                 
-                // Final redirect URL
-                const finalUrl = `https://auth.expo.io/@edcooper/mybarberai?${queryParams.toString()}`;
-                
-                // Log for debugging
-                console.log('Redirecting to:', finalUrl);
-                
-                // Redirect
-                window.location.href = finalUrl;
+                // Redirect to Expo auth with query parameters
+                window.location.href = `https://auth.expo.io/@edcooper/mybarberai?${queryParams.toString()}`;
             } catch (error) {
                 console.error('Redirect Error:', error);
                 document.body.innerHTML = `Error: ${error.message}. Please try again.`;
