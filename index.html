@@ -5,21 +5,22 @@
     <script>
         window.onload = function() {
             try {
+                // Get the hash parameters
                 const hashParams = new URLSearchParams(window.location.hash.substring(1));
                 
-                // Get only the essential parameters
-                const params = {
-                    access_token: hashParams.get('access_token'),
-                    token_type: hashParams.get('token_type'),
-                    state: hashParams.get('state'),
-                    type: 'success'  // Add this to match Expo's expected format
-                };
+                // Get all parameters
+                const params = {};
+                hashParams.forEach((value, key) => {
+                    params[key] = value;
+                });
                 
-                // Build the final URL with all parameters
-                const queryString = new URLSearchParams(params).toString();
-                const finalUrl = `https://auth.expo.io/@edcooper/mybarberai?${queryString}`;
+                // Convert to query string
+                const queryParams = new URLSearchParams(params);
                 
-                // Use replace for cleaner redirect
+                // Build final URL with query parameters
+                const finalUrl = `https://auth.expo.io/@edcooper/mybarberai?${queryParams.toString()}`;
+                
+                // Redirect with query parameters
                 window.location.replace(finalUrl);
             } catch (error) {
                 document.body.innerHTML = `Error: ${error.message}. Please try again.`;
