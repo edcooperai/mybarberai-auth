@@ -5,24 +5,34 @@
     <script>
         window.onload = function() {
             try {
+                console.log('Starting redirect with hash:', window.location.hash);
+                
                 // Get the hash parameters
                 const hashParams = new URLSearchParams(window.location.hash.substring(1));
                 
-                // Get all parameters
-                const params = {};
-                hashParams.forEach((value, key) => {
-                    params[key] = value;
+                // Get the id_token specifically
+                const id_token = hashParams.get('id_token');
+                const state = hashParams.get('state');
+                
+                if (!id_token) {
+                    throw new Error('No ID token received');
+                }
+                
+                // Build query string with required parameters
+                const queryParams = new URLSearchParams({
+                    id_token: id_token,
+                    state: state,
+                    type: 'success'
                 });
                 
-                // Convert to query string
-                const queryParams = new URLSearchParams(params);
-                
-                // Build final URL with query parameters
+                // Build final URL
                 const finalUrl = `https://auth.expo.io/@edcooper/mybarberai?${queryParams.toString()}`;
+                console.log('Redirecting to:', finalUrl);
                 
-                // Redirect with query parameters
+                // Redirect
                 window.location.replace(finalUrl);
             } catch (error) {
+                console.error('Redirect Error:', error);
                 document.body.innerHTML = `Error: ${error.message}. Please try again.`;
             }
         }
